@@ -14,5 +14,5 @@ async fn main() {
 }
 
 async fn serve_html() -> Html<&'static str> {
-    Html("<!DOCTYPE html><html><body><h1>Hello, world!</h1></body></html>")
+    Html(include_str!("index.html"))
 }
