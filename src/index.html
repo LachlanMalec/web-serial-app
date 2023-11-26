@@ -37,6 +37,21 @@
         document.getElementById('output').innerHTML = 'Web Serial API not supported.';
       }
     });
+
+    function sendDataToServer(data) {
+        fetch('/write', {
+            method: 'POST',
+            body: data
+        }).then(response => {
+            if (response.ok) {
+                console.log('data send to server');
+            } else {
+                console.error('error sending data to server');
+            }
+        }).catch(error => {
+            console.error('error:', error);
+        });
+    }
   </script>
 </body>
 
