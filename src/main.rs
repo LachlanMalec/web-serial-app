@@ -16,3 +16,8 @@ async fn main() {
 async fn serve_html() -> Html<&'static str> {
     Html(include_str!("index.html"))
 }
+
+#[derive(serde::Deserialize)]
+struct Input {
+    data: String,
+}
