@@ -8,15 +8,19 @@
 
 <body>
   <h1>Serial Connection Demo</h1>
+  <label for="baudRate">Baud Rate:</label>
+  <input type="number" id="baudRate" value="9600">
   <button id="connect">Connect to Serial Device</button>
   <div id="output"></div>
 
   <script>
     document.getElementById('connect').addEventListener('click', async () => {
+      const baudRate = parseInt(document.getElementById('baudRate').value, 10);
+
       if ('serial' in navigator) {
         try {
           const port = await navigator.serial.requestPort();
-          await port.open({ baudRate: 9600 });
+          await port.open({ baudRate: baudRate });
 
           const reader = port.readable.getReader();
           while (true) {
