@@ -1,40 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Serial Connection Demo</title>
-</head>
-<body>
-    <h1>Serial Connection Demo</h1>
-    <button id="connect">Connect to Serial Device</button>
-    <div id="output"></div>
 
-    <script>
-        document.getElementById('connect').addEventListener('click', async () => {
-            if ('serial' in navigator) {
-                try {
-                    const port = await navigator.serial.requestPort();
-                    await port.open({ baudRate: 9600 });
-                    
-                    const reader = port.readable.getReader();
-                    while (true) {
-                        const { value, done } = await reader.read();
-                        if (done) {
-                            reader.releaseLock();
-                            break;
-                        }
-                        console.log(value);
-                        document.getElementById('output').innerHTML += value;
-                    }
-                } catch (e) {
-                    console.error('There was an error opening the serial port:', e);
-                    document.getElementById('output').innerHTML = e;
-                }
-            } else {
-                console.log('Web Serial API not supported.');
-                document.getElementById('output').innerHTML = 'Web Serial API not supported.';
+<head>
+  <meta charset="UTF-8">
+  <title>Serial Connection Demo</title>
+</head>
+
+<body>
+  <h1>Serial Connection Demo</h1>
+  <button id="connect">Connect to Serial Device</button>
+  <div id="output"></div>
+
+  <script>
+    document.getElementById('connect').addEventListener('click', async () => {
+      if ('serial' in navigator) {
+        try {
+          const port = await navigator.serial.requestPort();
+          await port.open({ baudRate: 9600 });
+
+          const reader = port.readable.getReader();
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+              reader.releaseLock();
+              break;
             }
-        });
-    </script>
+            console.log(value);
+            document.getElementById('output').innerHTML += value;
+          }
+        } catch (e) {
+          console.error('There was an error opening the serial port:', e);
+          document.getElementById('output').innerHTML = e;
+        }
+      } else {
+        console.log('Web Serial API not supported.');
+        document.getElementById('output').innerHTML = 'Web Serial API not supported.';
+      }
+    });
+  </script>
 </body>
+
 </html>
