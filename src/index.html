@@ -48,9 +48,26 @@
               reader.releaseLock();
               break;
             }
-            console.log(value);
-            document.getElementById('output').innerHTML += value;
+
+            // Assuming 'value' is a Uint8Array containing hex data.
+            // Convert Uint8Array to hex string
+            const hexString = Array.from(value).map(byte => byte.toString(16).padStart(2, '0')).join('');
+            console.log(hexString);
+
+            // Convert hex string to ASCII string
+            let asciiString = '';
+            for (let i = 0; i < hexString.length; i += 2) {
+              const hexByte = hexString.substring(i, i + 2);
+              const charCode = parseInt(hexByte, 16);
+              asciiString += String.fromCharCode(charCode);
+            }
+
+            htmlString = asciiString.replace(/\n/g, '<br>');
+
+            console.log(asciiString);
+            document.getElementById('output').innerHTML += htmlString;
           }
+
         } catch (e) {
           console.error('There was an error opening the serial port:', e);
           document.getElementById('output').innerHTML = e;
@@ -62,18 +79,18 @@
     });
 
     function sendDataToServer(data) {
-        fetch('/write', {
-            method: 'POST',
-            body: data
-        }).then(response => {
-            if (response.ok) {
-                console.log('data send to server');
-            } else {
-                console.error('error sending data to server');
-            }
-        }).catch(error => {
-            console.error('error:', error);
-        });
+      fetch('/write', {
+        method: 'POST',
+        body: data
+      }).then(response => {
+        if (response.ok) {
+          console.log('data send to server');
+        } else {
+          console.error('error sending data to server');
+        }
+      }).catch(error => {
+        console.error('error:', error);
+      });
     }
   </script>
 </body>
