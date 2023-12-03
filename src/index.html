@@ -34,7 +34,14 @@
       const parity = document.getElementById('parity').value;
       const dataBits = parseInt(document.getElementById('dataBits').value, 10);
       const stopBits = parseInt(document.getElementById('stopBits').value, 10);
-      const flowControl = document.getElementById('flowControl').value === 'hardware';
+
+      const flowControlMap = {
+        'none': 'none',
+        'hardware': 'hardware',
+        'software': 'software'
+      };
+
+      const flowControl = flowControlMap[document.getElementById('flowControl').value];
 
       if ('serial' in navigator) {
         try {
