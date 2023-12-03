@@ -10,17 +10,36 @@
   <h1>Serial Connection Demo</h1>
   <label for="baudRate">Baud Rate:</label>
   <input type="number" id="baudRate" value="9600">
+  <label for="parity">Parity:</label>
+  <select id="parity">
+    <option value="none">None</option>
+    <option value="even">Even</option>
+    <option value="odd">Odd</option>
+  </select>
+  <label for="dataBits">Data Bits:</label>
+  <input type="number" id="dataBits" value="8">
+  <label for="stopBits">Stop Bits:</label>
+  <input type="number" id="stopBits" value="1">
+  <label for="flowControl">Flow Control:</label>
+  <select id="flowControl">
+    <option value="none">None</option>
+    <option value="hardware">Hardware</option>
+  </select>
   <button id="connect">Connect to Serial Device</button>
-  <div id="output"></div>
+  <div id="output" style="word-wrap: break-word;"></div>
 
   <script>
     document.getElementById('connect').addEventListener('click', async () => {
       const baudRate = parseInt(document.getElementById('baudRate').value, 10);
+      const parity = document.getElementById('parity').value;
+      const dataBits = parseInt(document.getElementById('dataBits').value, 10);
+      const stopBits = parseInt(document.getElementById('stopBits').value, 10);
+      const flowControl = document.getElementById('flowControl').value === 'hardware';
 
       if ('serial' in navigator) {
         try {
           const port = await navigator.serial.requestPort();
-          await port.open({ baudRate: baudRate });
+          await port.open({ baudRate, dataBits, stopBits, parity, flowControl });
 
           const reader = port.readable.getReader();
           while (true) {
